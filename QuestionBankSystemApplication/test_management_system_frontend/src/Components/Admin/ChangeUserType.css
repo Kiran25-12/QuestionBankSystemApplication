@@ -1,0 +1,120 @@
+.rolechangeform{
+
+    margin:0;
+      padding:0;
+      
+      font-family: sans-serif;
+      align-items: center;
+      justify-content: center;
+  }
+  .rolechange-box {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    width: 400px;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background: rgba(115, 112, 216, 0.5);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0,0,0,.6);
+    border-radius: 10px;
+  }
+  
+  .rolechange-box h2 {
+    margin: 0 0 30px;
+    padding: 0;
+    color: #0f244b;
+    text-align: center;
+  }
+  
+  .rolechange-box .user-box {
+    position: relative;
+  }
+  
+  .rolechange-box .user-box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+  }
+  .rolechange-box .user-box label {
+    position: absolute;
+    top:0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
+  }
+  
+  .rolechange-box .user-box input:focus ~ label,
+  .rolechange-box .user-box input:valid ~ label {
+    top: -20px;
+    left: 0;
+    color: #042123;
+    font-size: 14px;
+  }
+
+  /* CSS */
+.button-62 {
+    background: linear-gradient(to bottom right, rgb(155, 71, 239), #5a99ff);
+    border: 0;
+    border-radius: 12px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 2.5;
+    outline: transparent;
+    padding: 0 1rem;
+    text-decoration: none;
+    transition: box-shadow .2s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    text-align: center;
+    
+  }
+  
+  .button-62:not([disabled]):focus {
+    box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(116, 71, 239, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+  }
+  
+  .button-62:not([disabled]):hover {
+    box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(141, 71, 239, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+  }
+
+  .btn-container{
+    display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px;
+  }
+
+ 
+
+/* CSS */
+.button-70 {
+  background-image: linear-gradient(#5e9cf9, #9773df);
+  border: 0;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, .3) 0 5px 15px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: Montserrat,sans-serif;
+  font-size: .9em;
+  margin: 5px;
+  padding: 10px 15px;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}

@@ -1,0 +1,8 @@
+.question-paper {
+    display: flex; /* Enable flexbox for centering */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center horizontally */
+    margin: auto; /* Center content within the viewport */
+    padding: 20px; /* Optional padding for aesthetics */
+    border: 1px solid #ddd; /* Optional border for paper-like look */
+  }
