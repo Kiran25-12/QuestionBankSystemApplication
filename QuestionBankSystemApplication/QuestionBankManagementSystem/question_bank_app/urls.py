@@ -22,7 +22,8 @@ from .views import (
     ProvideAccess,QuestionUploadView,
     ExportQuestionsExcel,
     TestPaperView,
-    ShowAllTestPaper
+    ShowAllTestPaper,
+    TestPaperDownloadView
     
 )
 
@@ -56,6 +57,7 @@ urlpatterns = [
     # question test paper
     path('testpaper/<int:pk>',TestPaperView.as_view()),
     path('createtest/',TestPaperView.as_view()),
-    path('showallpaper/<int:pk>',ShowAllTestPaper.as_view())
+    path('showallpaper/<int:pk>',ShowAllTestPaper.as_view()),
+    path('testpaperdownload/<int:pk>',TestPaperDownloadView.as_view())
     
 ]

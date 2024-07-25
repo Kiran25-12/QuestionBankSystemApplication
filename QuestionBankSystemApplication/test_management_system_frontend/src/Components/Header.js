@@ -18,6 +18,7 @@ const darkTheme = createTheme({
   palette: {
     primary: {
       main: "#052b45",
+      
     },
   },
 });
@@ -111,9 +112,9 @@ const Header = () => {
 
   return (
     <>
-      <Stack spacing={2} sx={{ flexGrow: 1 }}>
+      <Stack spacing={2} sx={{ flexGrow: 1, paddingBottom: 7}}>
         <ThemeProvider theme={darkTheme}>
-          <AppBar position="static">
+          <AppBar position="fixed">
             <Container maxWidth="xl">
               <Toolbar disableGutters>
                 <Typography

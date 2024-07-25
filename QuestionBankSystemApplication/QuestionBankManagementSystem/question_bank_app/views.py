@@ -28,6 +28,9 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from io import BytesIO
 import pandas as pd
+import csv
+import urllib.parse
+
 
 
 
@@ -69,19 +72,18 @@ class AddTopic(APIView):
         if Topic.objects.filter(**request.data).exists():
             # return Response({'msg':'already exists'})
             raise serializers.ValidationError("This Topic already exists")
-        if request.data["name"] != "" and request.data["description"] != "":
-            user = User.objects.get(user_email=request.user.user_email)
-            topic = Topic.objects.create(
-                name=request.data["name"],
-                description=request.data["description"],
-                created_by=user,
-                updated_by=user,
-            )
-            return Response(
-                {"msg": "Topic Added Successfully!"}, status=status.HTTP_201_CREATED
-            )
-        else:
+        if request.data["name"] == "" or request.data["description"] == "":
             return Response(topic.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.get(user_email=request.user.user_email)
+        topic = Topic.objects.create(
+            name=request.data["name"],
+            description=request.data["description"],
+            created_by=user,
+            updated_by=user,
+        )
+        return Response(
+            {"msg": "Topic Added Successfully!"}, status=status.HTTP_201_CREATED
+        )
 
 
 # ************************** Update Topic Data by id ******************888
@@ -587,7 +589,41 @@ class ShowAllTestPaper(APIView):
         test = TestPaper.objects.filter(topic = topic)
         serializers = TestPaperSerializer(test,many=True)
         return Response(serializers.data,status=status.HTTP_202_ACCEPTED)
-            
-    
     
         
+class TestPaperDownloadView(APIView):
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            test_paper = TestPaper.objects.get(id=pk)
+        except TestPaper.DoesNotExist:
+            return Response({"error": "TestPaper not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        topic_name = test_paper.topic.name
+        test_name = test_paper.test_name
+        filename = f"{urllib.parse.quote(topic_name)}_{urllib.parse.quote(test_name)}.csv"
+        
+        response = self.generate_csv(test_paper)
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+    
+    def generate_csv(self, test_paper):
+        response = HttpResponse(content_type='text/csv')
+        writer = csv.writer(response)
+        
+        # Write header row
+        writer.writerow(['Question', 'Type', 'Difficulty', 'Estimated Time', 'Choices', 'Correct Answer'])
+        
+        for question in test_paper.qid.all():
+            choices = question.questionchoice_set.all()  # Corrected here
+            choice_texts = ', '.join([choice.choice_text for choice in choices])
+            correct_answers = ', '.join([choice.choice_text for choice in choices if choice.is_correct])
+            writer.writerow([
+                question.question,
+                question.types,
+                question.difficulty,
+                question.estimated_time_to_solve,
+                choice_texts,
+                correct_answers
+            ])
+        
+        return response
