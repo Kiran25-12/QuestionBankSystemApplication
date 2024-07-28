@@ -6,7 +6,7 @@ import {
   login,
   resetLoginState,
 } from "../../Redux/Feature/AuthSlices/LoginSlice";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TypeAnimation } from "react-type-animation";
  
@@ -18,7 +18,7 @@ const Login = () => {
  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, success, userData } = useSelector(
+  const {success, userData } = useSelector(
     (state) => state.authlogin.login
   );
  

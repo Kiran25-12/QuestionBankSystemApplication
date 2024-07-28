@@ -30,6 +30,9 @@ from io import BytesIO
 import pandas as pd
 import csv
 import urllib.parse
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
 
 
 
@@ -593,17 +596,25 @@ class ShowAllTestPaper(APIView):
         
 class TestPaperDownloadView(APIView):
     def get(self, request, pk, *args, **kwargs):
+        format = "pdf"
         try:
             test_paper = TestPaper.objects.get(id=pk)
         except TestPaper.DoesNotExist:
             return Response({"error": "TestPaper not found"}, status=status.HTTP_404_NOT_FOUND)
-        
+    
         topic_name = test_paper.topic.name
         test_name = test_paper.test_name
-        filename = f"{urllib.parse.quote(topic_name)}_{urllib.parse.quote(test_name)}.csv"
+        filename = f"{urllib.parse.quote(topic_name)}_{urllib.parse.quote(test_name)}"
         
-        response = self.generate_csv(test_paper)
-        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        if format == 'csv':
+            response = self.generate_csv(test_paper)
+            response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
+        elif format == 'pdf':
+            response = self.generate_pdf(test_paper)
+            response['Content-Disposition'] = f'attachment; filename="{filename}.pdf"'
+        else:
+            return Response({"error": "Invalid format"}, status=status.HTTP_400_BAD_REQUEST)
+        
         return response
     
     def generate_csv(self, test_paper):
@@ -627,3 +638,102 @@ class TestPaperDownloadView(APIView):
             ])
         
         return response
+
+    def generate_pdf(self, test_paper):
+        response = HttpResponse(content_type='application/pdf')
+        p = canvas.Canvas(response, pagesize=A4)
+        width, height = A4
+        margin = inch
+        page_width = width - 2 * margin
+        y_position = height - margin
+
+        # Header
+        p.setFont("Helvetica-Bold", 16)
+        p.drawString(margin, y_position, f"Subject Topic  {test_paper.topic.name}")
+        y_position -= 20
+        p.setFont("Helvetica", 12)
+        p.drawString(margin, y_position, f"Test Paper: {test_paper.test_name}")
+        y_position -= 20
+        p.drawString(margin, y_position, "Time: 1 Hour")
+        y_position -= 40
+
+        # Instructions
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(margin, y_position, "Instructions for the Candidates:")
+        y_position -= 20
+        instructions = [
+            "All questions are compulsory.",         
+        ]
+        for instruction in instructions:
+            if y_position < margin + 20:  # Adjusted for space
+                p.showPage()
+                y_position = height - margin
+            p.setFont("Helvetica", 10)
+            p.drawString(margin, y_position, f"• {instruction}")
+            y_position -= 20
+
+        # Questions
+        for question in test_paper.qid.all():
+            if y_position < margin + 100:  # Ensure there's space for the question
+                p.showPage()
+                y_position = height - margin
+            
+            # Draw question
+            p.setFont("Helvetica-Bold", 12)
+            question_text = f"Q: {question.question}"
+            question_text_wrapped = self.wrap_text(p, question_text, page_width)
+            for line in question_text_wrapped:
+                p.drawString(margin, y_position, line)
+                y_position -= 20
+
+            # Draw type, difficulty, and estimated time
+            p.setFont("Helvetica", 12)
+            p.drawString(margin, y_position, f"Type: {question.types}")
+            y_position -= 20
+            p.drawString(margin, y_position, f"Difficulty: {question.difficulty}")
+            y_position -= 20
+            p.drawString(margin, y_position, f"Estimated Time: {question.estimated_time_to_solve}")
+            y_position -= 20
+
+            # Draw choices with checkboxes
+            choices = question.questionchoice_set.all()
+            p.setFont("Helvetica", 12)
+            for i, choice in enumerate(choices):
+                choice_text = f"{chr(65 + i)}. {choice.choice_text}"
+                choice_text_wrapped = self.wrap_text(p, choice_text, page_width)
+                for line in choice_text_wrapped:
+                    p.drawString(margin, y_position, line)
+                    y_position -= 20
+                if y_position < margin:  # Ensure there's enough space
+                    p.showPage()
+                    y_position = height - margin
+
+            # Draw correct answers
+            correct_answers = ', '.join([choice.choice_text for choice in choices if choice.is_correct])
+            correct_answers_wrapped = self.wrap_text(p, f"Correct Answer: {correct_answers}", page_width)
+            for line in correct_answers_wrapped:
+                p.drawString(margin, y_position, line)
+                y_position -= 20
+
+            y_position -= 20
+
+        p.showPage()
+        p.save()
+
+        return response
+
+    def wrap_text(self, p, text, max_width):
+        """Wrap text for PDF drawing."""
+        words = text.split()
+        lines = []
+        current_line = words[0]
+
+        for word in words[1:]:
+            if p.stringWidth(current_line + ' ' + word) < max_width:
+                current_line += ' ' + word
+            else:
+                lines.append(current_line)
+                current_line = word
+
+        lines.append(current_line)
+        return lines
