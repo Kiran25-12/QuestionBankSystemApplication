@@ -13,8 +13,8 @@ import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import DeleteTestDialog from "./DeleteTestQuestion";
-import DownloadIcon from "@mui/icons-material/Download";
-import IconButton from "@mui/material/IconButton";
+import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
+import FilePresentIcon from "@mui/icons-material/FilePresent";
 
 function AvailableTest() {
   const { id: topicid } = useParams();
@@ -24,8 +24,7 @@ function AvailableTest() {
   const [currentTestId, setCurrentTestId] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [menuItemId, setMenuItemId] = useState(null);
-  const [state,setState] = useState([]);
-
+  const [state, setState] = useState([]);
 
   const columns = [
     { id: "id", name: "Test ID" },
@@ -35,7 +34,6 @@ function AvailableTest() {
     { id: "download", name: "Download" },
     { id: "delete", name: "Delete Paper" },
   ];
-  
 
   useEffect(() => {
     // Fetch data from API with authorization header
@@ -56,9 +54,8 @@ function AvailableTest() {
     fetchData();
   }, [topicid, token]);
 
-
-   // dowload excel
-   const handleDownload = (testPaper) => {
+  // dowload excel
+  const handleDownload = (testPaper) => {
     axios({
       url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}`,
       method: "GET",
@@ -80,7 +77,29 @@ function AvailableTest() {
         console.error("Error downloading Excel file: ", error);
       });
   };
- 
+  // download Pdf
+  const handleDownloadPdf = (testPaper) => {
+    axios({
+      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}`,
+      method: "GET",
+      responseType: "blob", // Important
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "questions.csv");
+        document.body.appendChild(link);
+        link.click();
+        this.setState({ fileUrl: url });
+      })
+      .catch((error) => {
+        console.error("Error downloading Excel file: ", error);
+      });
+  };
 
   // handle dialogbox
 
@@ -156,8 +175,11 @@ function AvailableTest() {
                     </Link>
                   </TableCell>
                   <TableCell align="center">
-                    <Link onClick={()=> handleDownload(testPaper.id)}>
-                    <DownloadIcon style={{ color: "blue" }} />
+                    <Link onClick={() => handleDownload(testPaper.id)} title="Excel Format">
+                      <DocumentScannerIcon style={{ color: "green" }} />
+                    </Link>
+                    <Link onClick={() => handleDownloadPdf(testPaper.id)} title="PDF Format">
+                      <FilePresentIcon style={{ color: "blue" }} />
                     </Link>
                   </TableCell>
                   <TableCell align="center">
