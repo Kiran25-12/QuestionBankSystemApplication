@@ -55,9 +55,9 @@ function AvailableTest() {
   }, [topicid, token]);
 
   // dowload excel
-  const handleDownload = (testPaper) => {
+  const handleDownload = (testPaper,format) => {
     axios({
-      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/'xls'`,
+      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/${format}/`,
       method: "GET",
       responseType: "blob", // Important
       headers: {
@@ -78,9 +78,9 @@ function AvailableTest() {
       });
   };
   // download Pdf
-  const handleDownloadPdf = (testPaper) => {
+  const handleDownloadPdf = (testPaper,format) => {
     axios({
-      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/'pdf'`,
+      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/${format}/`,
       method: "GET",
       responseType: "blob", // Important
       headers: {
@@ -175,10 +175,10 @@ function AvailableTest() {
                     </Link>
                   </TableCell>
                   <TableCell align="center">
-                    <Link onClick={() => handleDownload(testPaper.id)} title="Excel Format">
+                    <Link onClick={() => handleDownload(testPaper.id,'csv')} title="Excel Format">
                       <DocumentScannerIcon style={{ color: "gray" }} />
                     </Link>
-                    <Link onClick={() => handleDownloadPdf(testPaper.id)} title="PDF Format">
+                    <Link onClick={() => handleDownloadPdf(testPaper.id,'pdf')} title="PDF Format">
                       <FilePresentIcon style={{ color: "blue" }} />
                     </Link>
                   </TableCell>
