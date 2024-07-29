@@ -58,6 +58,6 @@ urlpatterns = [
     path('testpaper/<int:pk>',TestPaperView.as_view()),
     path('createtest/',TestPaperView.as_view()),
     path('showallpaper/<int:pk>',ShowAllTestPaper.as_view()),
-    path('testpaperdownload/<int:pk>',TestPaperDownloadView.as_view()),
+    path('testpaperdownload/<int:pk>/<str:format>/',TestPaperDownloadView.as_view()),
     
 ]

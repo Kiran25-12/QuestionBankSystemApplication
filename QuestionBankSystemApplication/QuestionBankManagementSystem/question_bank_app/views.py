@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import Topic, QuestionBank,TestPaper
 from rest_framework.response import Response
@@ -596,26 +596,28 @@ class ShowAllTestPaper(APIView):
         
 class TestPaperDownloadView(APIView):
     def get(self, request, pk, *args, **kwargs):
-        format = "pdf"
-        try:
-            test_paper = TestPaper.objects.get(id=pk)
-        except TestPaper.DoesNotExist:
-            return Response({"error": "TestPaper not found"}, status=status.HTTP_404_NOT_FOUND)
-    
-        topic_name = test_paper.topic.name
-        test_name = test_paper.test_name
-        filename = f"{urllib.parse.quote(topic_name)}_{urllib.parse.quote(test_name)}"
-        
-        if format == 'csv':
-            response = self.generate_csv(test_paper)
-            response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
-        elif format == 'pdf':
-            response = self.generate_pdf(test_paper)
-            response['Content-Disposition'] = f'attachment; filename="{filename}.pdf"'
+        if format not in ['pdf','xls']:
+            raise Http404('Formate not supported')
         else:
-            return Response({"error": "Invalid format"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                test_paper = TestPaper.objects.get(id=pk)
+            except TestPaper.DoesNotExist:
+                return Response({"error": "TestPaper not found"}, status=status.HTTP_404_NOT_FOUND)
+            topic_name = test_paper.topic.name
+            test_name = test_paper.test_name
+            filename = f"{urllib.parse.quote(topic_name)}_{urllib.parse.quote(test_name)}"
+            if format == 'csv':
+                response = self.generate_csv(test_paper)
+                response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
+            elif format == 'pdf':
+                response = self.generate_pdf(test_paper)
+                response['Content-Disposition'] = f'attachment; filename="{filename}.pdf"'
+            else:
+                return Response({"error": "Invalid format"}, status=status.HTTP_400_BAD_REQUEST)
         
         return response
+        
+        
     
     def generate_csv(self, test_paper):
         response = HttpResponse(content_type='text/csv')

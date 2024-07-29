@@ -57,7 +57,7 @@ function AvailableTest() {
   // dowload excel
   const handleDownload = (testPaper) => {
     axios({
-      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}`,
+      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/'xls'`,
       method: "GET",
       responseType: "blob", // Important
       headers: {
@@ -80,7 +80,7 @@ function AvailableTest() {
   // download Pdf
   const handleDownloadPdf = (testPaper) => {
     axios({
-      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}`,
+      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/'pdf'`,
       method: "GET",
       responseType: "blob", // Important
       headers: {
@@ -176,7 +176,7 @@ function AvailableTest() {
                   </TableCell>
                   <TableCell align="center">
                     <Link onClick={() => handleDownload(testPaper.id)} title="Excel Format">
-                      <DocumentScannerIcon style={{ color: "green" }} />
+                      <DocumentScannerIcon style={{ color: "gray" }} />
                     </Link>
                     <Link onClick={() => handleDownloadPdf(testPaper.id)} title="PDF Format">
                       <FilePresentIcon style={{ color: "blue" }} />
