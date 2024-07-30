@@ -91,7 +91,7 @@ function DemoTable(props) {
         link.setAttribute("download", "questionlist.xlsx");
         document.body.appendChild(link);
         link.click();
-        this.setState({ fileUrl: url });
+        // this.setState({ fileUrl: url });
       })
       .catch((error) => {
         console.error("Error downloading Excel file: ", error);
@@ -339,8 +339,8 @@ function DemoTable(props) {
                   <TableCell />
                   <TableCell />
                   <TableCell align="right">
-                    <button class="button-75" role="button">
-                      <span class="text">
+                    <button className="button-75" role="button">
+                      <span className="text">
                         <Link
                           to={`/addquestion/${topicid.id}`}
                           style={{ color: "#ffff", textDecoration: "none" }}
@@ -351,8 +351,8 @@ function DemoTable(props) {
                     </button>
                   </TableCell>
                   <TableCell align="right">
-                  <button class="button-75" role="button">
-                      <span class="text">
+                  <button className="button-75" role="button">
+                      <span className="text">
                         <Link
                           to={`/createtest/${topicid.id}`}
                           style={{ color: "#ffff", textDecoration: "none" }}
@@ -363,8 +363,8 @@ function DemoTable(props) {
                     </button>
                   </TableCell>
                   <TableCell align="right">
-                  <button class="button-75" role="button">
-                      <span class="text">
+                  <button className="button-75" role="button">
+                      <span className="text">
                         <Link
                           to={`/availabletest/${topicid.id}`}
                           style={{ color: "#ffff", textDecoration: "none" }}
@@ -375,8 +375,8 @@ function DemoTable(props) {
                     </button>
                   </TableCell>
                   <TableCell align="right">
-                  <button class="button-75" role="button">
-                      <span class="text">
+                  <button className="button-75" role="button">
+                      <span className="text">
                         <Link
                           to={'/uploadfile'}
                           style={{ color: "#ffff", textDecoration: "none" }}
@@ -388,11 +388,11 @@ function DemoTable(props) {
                   </TableCell>
                   <TableCell align="right">
                     <button
-                      class="button-75"
+                      className="button-75"
                       role="button"
                       onClick={handleDownload}
                     >
-                      <span class="text">Download Question</span>
+                      <span className="text">Download Question</span>
                     </button>
                   </TableCell>
                 </TableRow>

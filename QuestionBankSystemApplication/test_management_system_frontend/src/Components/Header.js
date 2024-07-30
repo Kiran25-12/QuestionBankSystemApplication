@@ -90,6 +90,7 @@ const Header = () => {
         if (response.status === 200) {
           console.log('email----------', userEmail)
           console.log('getting access_level res---',response.data)
+          console.log('getting accsess_level res---')
 
           setAccessLevel(response.data[0].access_level);
         } else {
@@ -109,6 +110,7 @@ const Header = () => {
 
   console.log("cureent user details in header ====", userDetails);
   console.log("cureent user access level header ====", accessLevel);
+  console.log("cureent user access level header")
 
   return (
     <>
@@ -136,6 +138,7 @@ const Header = () => {
                       '"Apple Color Emoji"',
                       '"Segoe UI Emoji"',
                       '"Segoe UI Symbol"',
+
                     ].join(","),
                     fontWeight: 700,
                     letterSpacing: "",

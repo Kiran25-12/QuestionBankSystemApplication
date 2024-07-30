@@ -57,7 +57,10 @@ function AvailableTest() {
   // dowload excel
   const handleDownload = (testPaper,format) => {
     axios({
-      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/${format}/`,
+      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/`,
+      params :{
+        type : format
+      },
       method: "GET",
       responseType: "blob", // Important
       headers: {
@@ -71,7 +74,8 @@ function AvailableTest() {
         link.setAttribute("download", "questions.csv");
         document.body.appendChild(link);
         link.click();
-        this.setState({ fileUrl: url });
+       
+        console.log('------------',setState)
       })
       .catch((error) => {
         console.error("Error downloading Excel file: ", error);
@@ -80,7 +84,10 @@ function AvailableTest() {
   // download Pdf
   const handleDownloadPdf = (testPaper,format) => {
     axios({
-      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/${format}/`,
+      url: `http://127.0.0.1:8000/testpaperdownload/${testPaper}/`,
+      params:{
+        type : format
+      },
       method: "GET",
       responseType: "blob", // Important
       headers: {
@@ -91,10 +98,9 @@ function AvailableTest() {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "questions.csv");
+        link.setAttribute("download", "questions.pdf");
         document.body.appendChild(link);
         link.click();
-        this.setState({ fileUrl: url });
       })
       .catch((error) => {
         console.error("Error downloading Excel file: ", error);

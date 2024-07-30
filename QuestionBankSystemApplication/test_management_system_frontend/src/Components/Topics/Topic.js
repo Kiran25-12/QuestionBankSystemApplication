@@ -36,6 +36,7 @@ function Topic() {
     { id: 'Viewques', name: 'Question List' },
     { id: 'action', name: "Action" }
   ]
+  
 
   const token = localStorage.getItem('token'); // get logged in users token from localstorage
   const [topics, setTopics] = useState([]);
@@ -158,7 +159,7 @@ function Topic() {
                   <TableCell><span style={{ color: '#003049', fontSize: 21, fontWeight: 'bold' }}>Topic List</span></TableCell>
                   <TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell /><TableCell />
                   <TableCell align='right'>
-                    <button class="button-75" role="button"><span class="text">
+                    <button className="button-75" role="button"><span className="text">
                       <Link to='/addtopic' style={{ color: "#ffff", textDecoration: 'none' }}>
                         Add Topic</Link></span>
                     </button></TableCell>
@@ -173,10 +174,11 @@ function Topic() {
             <TableHead style={{ background: '#ffffff' }}>
                 <TableRow style={{ background: '#ffffff' }} >
                   {columns.map((column) => (
-                    <TableCell style={{
+                    <TableCell  key={column.id} style={{
                        color: 'black',
                       fontWeight: 'bold', fontSize: 16 
-                    }} key={column.id}>{column.name}</TableCell>
+                    }}>{column.name}</TableCell>
+                    
                   ))}
                 </TableRow>
               </TableHead>
@@ -263,6 +265,7 @@ function Topic() {
                 </DialogActions>
               </Dialog>
 
+              
 
 
             </Table>
