@@ -23,6 +23,7 @@ export const fetchUserDetails = createAsyncThunk(
                 return thunkAPI.rejectWithValue({ error: "No response from server" });
             } else {
                 toast.error(`Failed to fetch user details: ${error.message}`);
+
                 return thunkAPI.rejectWithValue({ error: error.message });
             }
         }
@@ -35,6 +36,7 @@ const userDetailsSlice = createSlice({
         user: null,
         loading: false,
         error: null,
+
     },
     extraReducers: (builder) => {
         builder

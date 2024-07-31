@@ -13,6 +13,7 @@ export const changeUserRole = createAsyncThunk(
             },
         });
         console.log("change user type slice response---===",response.data)
+        
         return response.data;
     }
 );

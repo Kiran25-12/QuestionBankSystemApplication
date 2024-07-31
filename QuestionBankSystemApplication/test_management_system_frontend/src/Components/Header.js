@@ -90,7 +90,6 @@ const Header = () => {
         if (response.status === 200) {
           console.log('email----------', userEmail)
           console.log('getting access_level res---',response.data)
-          console.log('getting accsess_level res---')
 
           setAccessLevel(response.data[0].access_level);
         } else {

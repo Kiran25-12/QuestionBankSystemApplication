@@ -84,19 +84,17 @@ class ChangePassword(APIView):
 
 class UserProfile(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data)
 
-
+# return all userlist 
 class AllUserList(APIView):
     def get(self, request):
         user = User.objects.all()
         serializer = UserSerializer(user, many=True)
         print(user)
         return Response(serializer.data)
-
 
 #***********************  Admin Views  ******************************************************
 class AdminUserList(APIView):
